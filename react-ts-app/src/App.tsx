@@ -7,11 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotate } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import { IPlanetData } from "./types";
+import { FetchSearchPlanet } from "./apis/Planets";
 
 type MyState = {
   data: IPlanetData[];
   loading: boolean;
   error: string;
+  inputValue: string;
 };
 
 export default class App extends React.Component<null, MyState> {
@@ -19,23 +21,30 @@ export default class App extends React.Component<null, MyState> {
     data: [],
     loading: false,
     error: "",
+    inputValue: "",
   };
 
   componentDidMount() {
-    const apiUrl = "https://swapi.dev/api/planets/";
-    this.setState({ data: [], loading: true, error: "", });
-    fetch(apiUrl)
-      .then((response) => response.json())
+    const valueLocalStorage = localStorage.getItem("inputValue");
+    this.setState({
+      data: [],
+      loading: true,
+      error: "",
+      inputValue: valueLocalStorage || "",
+    });
+    FetchSearchPlanet(valueLocalStorage || "")
       .then((data) => {
         console.log("This is your data", data);
-        if(!data.results) {
+        if (!data.results) {
           this.setState({
-            data:[],
+            data: [],
             loading: false,
-            error: "Something went wrong; please review your server connection!",
+            error:
+              "Something went wrong; please review your server connection!",
           });
-          return
+          return;
         }
+
         this.setState({
           data: data.results,
           loading: false,
@@ -45,22 +54,37 @@ export default class App extends React.Component<null, MyState> {
       .catch(() => {
         console.log("some error");
         this.setState({
-          data:[],
+          data: [],
           loading: false,
           error: "Something went wrong; please review your server connection!",
         });
       });
   }
 
+  changeInput = (text: string) => {
+    this.setState({ ...this.state, inputValue: text });
+  };
+
+  changeData = (planets: IPlanetData[]) => {
+    this.setState({ ...this.state, data: planets });
+  };
+
   render() {
     return (
       <div className="container">
-        <Title></Title>
-        <div className="searchWrapper">
-          <SearchBar></SearchBar>
-          <SearchButton></SearchButton>
-        </div>
-        <div className="planets">
+        <Title />
+        <section className="searchWrapper">
+          <SearchBar
+            changeInput={this.changeInput}
+            value={this.state.inputValue}
+            changeData={this.changeData}
+          />
+          <SearchButton
+            changeData={this.changeData}
+            value={this.state.inputValue}
+          />
+        </section>
+        <section className="planets">
           {this.state.error && (
             <div className="error">
               Something went wrong; please review your server connection!
@@ -76,7 +100,7 @@ export default class App extends React.Component<null, MyState> {
           {!this.state.loading && !this.state.error && (
             <PlanetList data={this.state.data}></PlanetList>
           )}
-        </div>
+        </section>
       </div>
     );
   }

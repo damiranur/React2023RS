@@ -1,8 +1,11 @@
-import axios from "axios";
+export async function FetchPlanet() {
+  const url = "https://swapi.dev/api/planets/";
+  const response = await fetch(url);
+  return response.json();
+}
 
-export default axios.create({
-  baseURL: "https://swapi.dev/api/planets/",
-  params: {
-    maxResults: 10,
-  },
-});
+export async function FetchSearchPlanet(value: string) {
+  const url = `https://swapi.dev/api/planets/?search=${value}`;
+  const response = await fetch(url);
+  return response.json();
+}
