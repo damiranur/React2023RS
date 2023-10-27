@@ -1,25 +1,20 @@
 import React from "react";
 import classes from "./Button.module.css";
-import { FetchSearchPlanet } from "../../apis/Planets";
-import { IPlanetData } from "../../types";
 
 interface IProps {
-  changeData: (planets: IPlanetData[]) => void;
-  value: string;
+  handleClick: () => void;
+  children: string;
+  className?: string;
 }
-export default class SearchButton extends React.Component<IProps> {
-  onClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+export default class Button extends React.Component<IProps> {
+  handleClick = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    FetchSearchPlanet(this.props.value).then((data) => {
-      this.props.changeData(data.results);
-      localStorage.setItem("inputValue", this.props.value);
-    });
+    this.props.handleClick();
   };
-
   render() {
     return (
-      <button className={classes.button} onClick={this.onClick}>
-        Search
+      <button className={classes.button} onClick={this.handleClick}>
+        {this.props.children}
       </button>
     );
   }
