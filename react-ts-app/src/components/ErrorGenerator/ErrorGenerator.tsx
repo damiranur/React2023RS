@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../Button/Button";
-import classes from './ErrorGenerator.module.css'
+import classes from "./ErrorGenerator.module.css";
 
 interface ErrorState {
   hasError: boolean;
@@ -26,7 +26,10 @@ export default class ErrorGenerator extends React.Component<
   }
 
   render() {
-    return <div className={classes.errorBtn}><Button handleClick={this.handleClick}>Simulate Error</Button></div>
-    ;
+    return (
+      <div className={classes.errorBtn}>
+        <Button handleClick={this.handleClick}>Simulate Error</Button>
+      </div>
+    );
   }
 }

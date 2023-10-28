@@ -7,6 +7,7 @@ interface IProps {
   changeInput: (text: string) => void;
   value: string;
   changeData: (planets: IPlanetData[]) => void;
+  changeLoading:(loading: boolean)=>void;
 }
 export default class SearchBar extends React.Component<IProps> {
   onInputChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
@@ -15,6 +16,7 @@ export default class SearchBar extends React.Component<IProps> {
 
   onFormSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
+    this.props.changeLoading(true),
     FetchSearchPlanet(this.props.value).then((data) => {
       this.props.changeData(data.results);
       localStorage.setItem("inputValue", this.props.value);

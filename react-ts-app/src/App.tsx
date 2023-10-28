@@ -36,7 +36,6 @@ export default class App extends React.Component<null, MyState> {
     });
     FetchSearchPlanet(valueLocalStorage || "")
       .then((data) => {
-        console.log("This is your data", data);
         if (!data.results) {
           this.setState({
             data: [],
@@ -54,7 +53,6 @@ export default class App extends React.Component<null, MyState> {
         });
       })
       .catch(() => {
-        console.log("some error");
         this.setState({
           data: [],
           loading: false,
@@ -68,8 +66,12 @@ export default class App extends React.Component<null, MyState> {
   };
 
   changeData = (planets: IPlanetData[]) => {
-    this.setState({ ...this.state, data: planets });
+    this.setState({ ...this.state, data: planets,loading:false });
   };
+
+  changeLoading = (loading: boolean) => {
+    this.setState({...this.state, loading:loading})
+  }
 
   render() {
     return (
@@ -81,10 +83,12 @@ export default class App extends React.Component<null, MyState> {
               changeInput={this.changeInput}
               value={this.state.inputValue}
               changeData={this.changeData}
+              changeLoading={this.changeLoading}
             />
             <SearchButton
               changeData={this.changeData}
               value={this.state.inputValue}
+              changeLoading={this.changeLoading}
             />
           </section>
           <ErrorGenerator />

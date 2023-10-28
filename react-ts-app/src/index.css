@@ -27,10 +27,10 @@
 
 .error {
   position: absolute;
-  color: #fff;
+  color: red;
   text-align: center;
   font-size: 20px;
-  top: 210px;
+  top: 240px;
   transform: translate(-50%, -50%);
 }
 

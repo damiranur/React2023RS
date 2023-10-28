@@ -6,10 +6,13 @@ import Button from "../Button/Button";
 interface IProps {
   changeData: (planets: IPlanetData[]) => void;
   value: string;
+  changeLoading:(loading: boolean)=>void
 }
 export default class SearchButton extends React.Component<IProps> {
   onClick = () => {
-    FetchSearchPlanet(this.props.value).then((data) => {
+    this.props.changeLoading(true),
+    FetchSearchPlanet(this.props.value).
+    then((data) => {
       this.props.changeData(data.results);
       localStorage.setItem("inputValue", this.props.value);
     });
