@@ -1,35 +1,23 @@
-import React from "react";
-import Button from "../Button/Button";
-import classes from "./ErrorGenerator.module.css";
+import React, { useState, useEffect } from "react";
+import { Button } from "../Button/Button";
 
 interface ErrorState {
   hasError: boolean;
 }
 
-export default class ErrorGenerator extends React.Component<
-  unknown,
-  ErrorState
-> {
-  state: ErrorState = {
-    hasError: false,
-  };
-  handleClick = () => {
-    this.setState({ hasError: true });
+export const ErrorGenerator: React.FC<ErrorState> = () => {
+  const [hasError, setHasError] = useState(false);
+
+  const handleClick = () => {
+    setHasError(true);
   };
 
-  componentDidUpdate(): void {
-    if (this.state.hasError) {
+  useEffect(() => {
+    if (hasError) {
       throw new Error(
         "Something went wrong; please review your server connection!",
       );
     }
-  }
-
-  render() {
-    return (
-      <div className={classes.errorBtn}>
-        <Button handleClick={this.handleClick}>Simulate Error</Button>
-      </div>
-    );
-  }
-}
+  });
+  return <Button handleClick={handleClick}>Simulate Error</Button>;
+};

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Button from "../Button/Button";
+import { Button } from "../Button/Button";
 
 interface Props {
   children?: ReactNode;
@@ -30,9 +30,7 @@ export default class ErrorBoundary extends React.Component<Props, ErrorState> {
     if (this.state.hasError) {
       return (
         <>
-          <h2 style={{ color: "white", border: "1px solid white" }}>
-            Error Boundary - Fallback UI
-          </h2>
+          <h2 style={{ color: "#6e1dbf" }}>Error Boundary - Fallback UI</h2>
           <Button handleClick={this.handleRevertError}>Return</Button>
         </>
       );

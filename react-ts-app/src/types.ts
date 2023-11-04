@@ -8,4 +8,5 @@ export interface IPlanetData {
   terrain: string;
   surface_water: string;
   population: string;
+  url: string;
 }

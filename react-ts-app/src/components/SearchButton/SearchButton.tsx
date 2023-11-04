@@ -1,24 +1,21 @@
 import React from "react";
-import { FetchSearchPlanet } from "../../apis/Planets";
+import { fetchSearchPlanet } from "../../apis/PlanetsApi";
 import { IPlanetData } from "../../types";
-import Button from "../Button/Button";
+import { Button } from "../Button/Button";
 
 interface IProps {
   changeData: (planets: IPlanetData[]) => void;
   value: string;
-  changeLoading:(loading: boolean)=>void
+  currentPage: number;
+  changeLoading: (loading: boolean) => void;
 }
-export default class SearchButton extends React.Component<IProps> {
-  onClick = () => {
-    this.props.changeLoading(true),
-    FetchSearchPlanet(this.props.value).
-    then((data) => {
-      this.props.changeData(data.results);
-      localStorage.setItem("inputValue", this.props.value);
-    });
+export const SearchButton: React.FC<IProps> = (props) => {
+  const onClick = () => {
+    props.changeLoading(true),
+      fetchSearchPlanet(props.value, props.currentPage).then((data) => {
+        props.changeData(data.results);
+        localStorage.setItem("inputValue", props.value);
+      });
   };
-
-  render() {
-    return <Button handleClick={this.onClick}>Search</Button>;
-  }
-}
+  return <Button handleClick={onClick}>Search</Button>;
+};

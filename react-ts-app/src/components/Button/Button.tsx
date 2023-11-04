@@ -6,16 +6,14 @@ interface IProps {
   children: string;
   className?: string;
 }
-export default class Button extends React.Component<IProps> {
-  handleClick = (event: React.SyntheticEvent) => {
+export const Button: React.FC<IProps> = (props) => {
+  const handleClick = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    this.props.handleClick();
+    props.handleClick();
   };
-  render() {
-    return (
-      <button className={classes.button} onClick={this.handleClick}>
-        {this.props.children}
-      </button>
-    );
-  }
-}
+  return (
+    <button className={classes.button} onClick={handleClick}>
+      {props.children}
+    </button>
+  );
+};

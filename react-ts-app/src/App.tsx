@@ -1,116 +1,180 @@
-import React from "react";
-import { Title } from "./components/Title/Title";
-import SearchButton from "./components/SearchButton/SearchButton";
-import SearchBar from "./components/SearchBar/SearchBar";
-import PlanetList from "./components/PlanetList/PlanetList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRotate } from "@fortawesome/free-solid-svg-icons";
-import "./index.css";
-import { IPlanetData } from "./types";
-import { FetchSearchPlanet } from "./apis/Planets";
+import React, { useEffect, useState } from "react";
+import classes from "./app.module.css";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
-import ErrorGenerator from "./components/ErrorGenerator/ErrorGenerator";
+import { Title } from "./components/Title/Title";
+import { SearchBar } from "./components/SearchBar/SearchBar";
+import { SearchButton } from "./components/SearchButton/SearchButton";
+import { ErrorGenerator } from "./components/ErrorGenerator/ErrorGenerator";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PlanetList } from "./components/PlanetList/PlanetList";
+import { IPlanetData } from "./types";
+import { faRotate } from "@fortawesome/free-solid-svg-icons";
+import { fetchSearchPlanet } from "./apis/PlanetsApi";
+import { Outlet } from "react-router";
+import { Button } from "./components/Button/Button";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Pagination } from "./components/Pagination/Pagination";
 
 type MyState = {
   data: IPlanetData[];
   loading: boolean;
   error: string;
   inputValue: string;
+  dataCount: number;
 };
 
-export default class App extends React.Component<null, MyState> {
-  state: MyState = {
+export const Root: React.FC = () => {
+  const [myState, setMyState] = useState<MyState>({
     data: [],
     loading: false,
     error: "",
     inputValue: "",
-  };
+    dataCount: 1,
+  });
 
-  componentDidMount() {
+  const navigateTo = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const planetId = searchParams.get("details");
+
+  useEffect(() => {
     const valueLocalStorage = localStorage.getItem("inputValue");
-    this.setState({
+    setMyState({
       data: [],
       loading: true,
       error: "",
       inputValue: valueLocalStorage || "",
+      dataCount: 1,
     });
-    FetchSearchPlanet(valueLocalStorage || "")
+    fetchSearchPlanet(valueLocalStorage || "", currentPage)
       .then((data) => {
         if (!data.results) {
-          this.setState({
+          setMyState({
             data: [],
             loading: false,
             error:
               "Something went wrong; please review your server connection!",
+            inputValue: valueLocalStorage || "",
+            dataCount: 1,
           });
           return;
         }
-
-        this.setState({
+        setMyState({
           data: data.results,
           loading: false,
           error: "",
+          inputValue: valueLocalStorage || "",
+          dataCount: data.count,
         });
       })
       .catch(() => {
-        this.setState({
+        setMyState({
           data: [],
           loading: false,
           error: "Something went wrong; please review your server connection!",
+          inputValue: valueLocalStorage || "",
+          dataCount: 1,
         });
       });
-  }
+  }, []);
 
-  changeInput = (text: string) => {
-    this.setState({ ...this.state, inputValue: text });
+  const changeInput = (text: string) => {
+    setMyState({ ...myState, inputValue: text });
   };
 
-  changeData = (planets: IPlanetData[]) => {
-    this.setState({ ...this.state, data: planets,loading:false });
+  const changeData = (planets: IPlanetData[]) => {
+    setMyState({ ...myState, data: planets, loading: false });
   };
 
-  changeLoading = (loading: boolean) => {
-    this.setState({...this.state, loading:loading})
+  const changeLoading = (loading: boolean) => {
+    setMyState({ ...myState, loading: loading });
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  let lastPage = 0;
+  if (myState.dataCount < 10) {
+    lastPage = 1;
+  } else {
+    lastPage = Math.ceil(myState.dataCount / 10);
   }
 
-  render() {
-    return (
-      <div className="container">
-        <ErrorBoundary>
-          <Title />
-          <section className="searchWrapper">
-            <SearchBar
-              changeInput={this.changeInput}
-              value={this.state.inputValue}
-              changeData={this.changeData}
-              changeLoading={this.changeLoading}
-            />
-            <SearchButton
-              changeData={this.changeData}
-              value={this.state.inputValue}
-              changeLoading={this.changeLoading}
-            />
-          </section>
-          <ErrorGenerator />
-          <section className="planets">
-            {this.state.error && (
-              <div className="error">
-                Something went wrong; please review your server connection!
-              </div>
-            )}
-            {this.state.loading && (
-              <FontAwesomeIcon
-                icon={faRotate}
-                style={{ color: "#fff", fontSize: 20, marginTop: 50 }}
-                spin
+  return (
+    <div>
+      <ErrorBoundary>
+        {!planetId && (
+          <section className={classes.searchWrapper}>
+            <Title />
+            <div className={classes.searchBox}>
+              <SearchBar
+                changeInput={changeInput}
+                value={myState.inputValue}
+                changeData={changeData}
+                changeLoading={changeLoading}
+                currentPage={currentPage}
               />
-            )}
-            {!this.state.loading && !this.state.error && (
-              <PlanetList data={this.state.data}></PlanetList>
-            )}
+              <SearchButton
+                changeData={changeData}
+                value={myState.inputValue}
+                changeLoading={changeLoading}
+                currentPage={currentPage}
+              />
+              <ErrorGenerator hasError={false} />
+            </div>
           </section>
-        </ErrorBoundary>
-      </div>
-    );
-  }
-}
+        )}
+
+        <section
+          className={!planetId ? classes.planetsFull : classes.planetsSidebar}
+        >
+          {myState.error && (
+            <div className="error">
+              Something went wrong; please review your server connection!
+            </div>
+          )}
+          {myState.loading && (
+            <FontAwesomeIcon
+              icon={faRotate}
+              style={{
+                color: "#6e1dbf",
+                fontSize: 20,
+                marginTop: 50,
+                marginLeft: 600,
+              }}
+              spin
+            />
+          )}
+          {!myState.loading && !myState.error && (
+            <div
+              className={
+                !planetId
+                  ? classes.planetsWrapper
+                  : classes.sidebarPlanetsWrapper
+              }
+            >
+              <PlanetList
+                data={myState.data}
+                currentPage={currentPage}
+              ></PlanetList>
+              {!planetId && (
+                <Pagination
+                  currentPage={currentPage}
+                  lastPage={lastPage}
+                  setCurrentPage={setCurrentPage}
+                  changeData={changeData}
+                />
+              )}
+              {planetId && (
+                <div className={classes.goBackBtn}>
+                  <Button handleClick={() => navigateTo("/")}>Go Back</Button>
+                </div>
+              )}
+            </div>
+          )}
+
+          <Outlet />
+        </section>
+      </ErrorBoundary>
+    </div>
+  );
+};

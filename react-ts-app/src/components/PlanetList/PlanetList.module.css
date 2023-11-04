@@ -1,17 +1,26 @@
 .planetsWrapper {
   display: flex;
   flex-wrap: wrap;
-  padding: 30px;
-  row-gap: 20px;
-  column-gap: 10px;
   justify-content: center;
-  align-items: center;
+  padding-top: 20px;
+  row-gap: 5px;
+  column-gap: 10px;
+  height: 40px;
 }
 
 .planetCard {
-  background-color: #6e1dbf63;
+  background-color: #6e1dbfd0;
   width: 250px;
   border-radius: 10px;
   padding: 10px;
-  min-height: 185px;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: white;
 }
