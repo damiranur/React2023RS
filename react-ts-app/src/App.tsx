@@ -86,25 +86,25 @@ export const Root: React.FC = () => {
   }, []);
 
   const changeInput = (text: string) => {
-    setMyState((prev)=> ({ ...prev, inputValue: text }));
+    setMyState((prev) => ({ ...prev, inputValue: text }));
   };
 
   const changeData = (planets: IPlanetData[]) => {
-    setMyState((prev)=> ({ ...prev, data: planets, loading: false}));
+    setMyState((prev) => ({ ...prev, data: planets, loading: false }));
   };
 
   const changeLoading = (loading: boolean) => {
-    setMyState((prev)=>({ ...prev, loading: loading }));
+    setMyState((prev) => ({ ...prev, loading: loading }));
   };
 
-  const changeDataCount = (dataCount: number) =>{
-    setMyState((prev) => ({...prev, dataCount: dataCount}))
-  }
+  const changeDataCount = (dataCount: number) => {
+    setMyState((prev) => ({ ...prev, dataCount: dataCount }));
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const changePlanetsPerPage = (planetsPerPage: number) => {
-    setMyState((prev)=>({ ...prev, planetsPerPage: planetsPerPage }));
+    setMyState((prev) => ({ ...prev, planetsPerPage: planetsPerPage }));
   };
 
   let lastPage = 0;
@@ -184,7 +184,9 @@ export const Root: React.FC = () => {
                   changeLoading={changeLoading}
                 />
               )}
-              <Select changePlanetsPerPage={changePlanetsPerPage} />
+              {!planetId && (
+                <Select changePlanetsPerPage={changePlanetsPerPage} />
+              )}
               {planetId && (
                 <div className={classes.goBackBtn}>
                   <Button handleClick={() => navigateTo("/")}>Go Back</Button>
