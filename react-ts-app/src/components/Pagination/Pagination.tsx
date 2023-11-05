@@ -8,6 +8,7 @@ interface IPageLinkProps {
   lastPage: number;
   setCurrentPage: (currentPage: number) => void;
   changeData: (planets: IPlanetData[]) => void;
+  changeLoading: (loading: boolean) => void;
 }
 
 export const Pagination: React.FC<IPageLinkProps> = ({
@@ -15,9 +16,9 @@ export const Pagination: React.FC<IPageLinkProps> = ({
   lastPage,
   setCurrentPage,
   changeData,
+  changeLoading,
 }) => {
   const pageNumbers = Array.from({ length: lastPage }, (_, i) => i + 1);
-
 
   return (
     <nav className={classes.pagination} aria-label="Pagination">
@@ -26,6 +27,7 @@ export const Pagination: React.FC<IPageLinkProps> = ({
         pageNum={currentPage - 1}
         changeData={changeData}
         setCurrentPage={setCurrentPage}
+        changeLoading={changeLoading}
       >
         Previous
       </PageLink>
@@ -36,6 +38,7 @@ export const Pagination: React.FC<IPageLinkProps> = ({
           pageNum={pageNum}
           changeData={changeData}
           setCurrentPage={setCurrentPage}
+          changeLoading={changeLoading}
         >
           {pageNum}
         </PageLink>
@@ -45,6 +48,7 @@ export const Pagination: React.FC<IPageLinkProps> = ({
         pageNum={currentPage + 1}
         changeData={changeData}
         setCurrentPage={setCurrentPage}
+        changeLoading={changeLoading}
       >
         Next
       </PageLink>

@@ -8,7 +8,8 @@ interface IProps {
   value: string;
   changeData: (planets: IPlanetData[]) => void;
   changeLoading: (loading: boolean) => void;
-  currentPage:number
+  setCurrentPage: (currentPage: number) => void;
+  changeDataCount: (dataCount: number) => void;
 }
 export const SearchBar: React.FC<IProps> = (props) => {
   const onInputChange = (event: React.SyntheticEvent<HTMLInputElement>) => {
@@ -18,9 +19,11 @@ export const SearchBar: React.FC<IProps> = (props) => {
   const onFormSubmit = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
     props.changeLoading(true),
-      fetchSearchPlanet(props.value, props.currentPage).then((data) => {
+      fetchSearchPlanet(props.value, 1).then((data) => {
         props.changeData(data.results);
         localStorage.setItem("inputValue", props.value);
+        props.changeDataCount(data.count);
+        props.setCurrentPage(1);
       });
   };
 

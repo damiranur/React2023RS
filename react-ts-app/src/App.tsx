@@ -14,6 +14,7 @@ import { Outlet } from "react-router";
 import { Button } from "./components/Button/Button";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Pagination } from "./components/Pagination/Pagination";
+import { Select } from "./components/Select/Select";
 
 type MyState = {
   data: IPlanetData[];
@@ -21,6 +22,7 @@ type MyState = {
   error: string;
   inputValue: string;
   dataCount: number;
+  planetsPerPage: number;
 };
 
 export const Root: React.FC = () => {
@@ -30,6 +32,7 @@ export const Root: React.FC = () => {
     error: "",
     inputValue: "",
     dataCount: 1,
+    planetsPerPage: 10,
   });
 
   const navigateTo = useNavigate();
@@ -45,6 +48,7 @@ export const Root: React.FC = () => {
       error: "",
       inputValue: valueLocalStorage || "",
       dataCount: 1,
+      planetsPerPage: 10,
     });
     fetchSearchPlanet(valueLocalStorage || "", currentPage)
       .then((data) => {
@@ -56,6 +60,7 @@ export const Root: React.FC = () => {
               "Something went wrong; please review your server connection!",
             inputValue: valueLocalStorage || "",
             dataCount: 1,
+            planetsPerPage: 10,
           });
           return;
         }
@@ -65,6 +70,7 @@ export const Root: React.FC = () => {
           error: "",
           inputValue: valueLocalStorage || "",
           dataCount: data.count,
+          planetsPerPage: 10,
         });
       })
       .catch(() => {
@@ -74,23 +80,32 @@ export const Root: React.FC = () => {
           error: "Something went wrong; please review your server connection!",
           inputValue: valueLocalStorage || "",
           dataCount: 1,
+          planetsPerPage: 10,
         });
       });
   }, []);
 
   const changeInput = (text: string) => {
-    setMyState({ ...myState, inputValue: text });
+    setMyState((prev)=> ({ ...prev, inputValue: text }));
   };
 
   const changeData = (planets: IPlanetData[]) => {
-    setMyState({ ...myState, data: planets, loading: false });
+    setMyState((prev)=> ({ ...prev, data: planets, loading: false}));
   };
 
   const changeLoading = (loading: boolean) => {
-    setMyState({ ...myState, loading: loading });
+    setMyState((prev)=>({ ...prev, loading: loading }));
   };
 
+  const changeDataCount = (dataCount: number) =>{
+    setMyState((prev) => ({...prev, dataCount: dataCount}))
+  }
+
   const [currentPage, setCurrentPage] = useState(1);
+
+  const changePlanetsPerPage = (planetsPerPage: number) => {
+    setMyState((prev)=>({ ...prev, planetsPerPage: planetsPerPage }));
+  };
 
   let lastPage = 0;
   if (myState.dataCount < 10) {
@@ -111,13 +126,15 @@ export const Root: React.FC = () => {
                 value={myState.inputValue}
                 changeData={changeData}
                 changeLoading={changeLoading}
-                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                changeDataCount={changeDataCount}
               />
               <SearchButton
                 changeData={changeData}
                 value={myState.inputValue}
                 changeLoading={changeLoading}
-                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                changeDataCount={changeDataCount}
               />
               <ErrorGenerator hasError={false} />
             </div>
@@ -138,8 +155,10 @@ export const Root: React.FC = () => {
               style={{
                 color: "#6e1dbf",
                 fontSize: 20,
+                marginLeft: "auto",
+                marginRight: "auto",
                 marginTop: 50,
-                marginLeft: 600,
+                marginBottom: 0,
               }}
               spin
             />
@@ -162,8 +181,10 @@ export const Root: React.FC = () => {
                   lastPage={lastPage}
                   setCurrentPage={setCurrentPage}
                   changeData={changeData}
+                  changeLoading={changeLoading}
                 />
               )}
+              <Select changePlanetsPerPage={changePlanetsPerPage} />
               {planetId && (
                 <div className={classes.goBackBtn}>
                   <Button handleClick={() => navigateTo("/")}>Go Back</Button>

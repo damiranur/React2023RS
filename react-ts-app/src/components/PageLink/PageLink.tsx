@@ -10,6 +10,7 @@ interface IPageLinkProps extends HTMLProps<HTMLAnchorElement> {
   pageNum: number;
   changeData: (planets: IPlanetData[]) => void;
   setCurrentPage: (currentPage: number) => void;
+  changeLoading: (loading: boolean) => void;
 }
 
 export const PageLink: React.FC<IPageLinkProps> = ({
@@ -20,16 +21,17 @@ export const PageLink: React.FC<IPageLinkProps> = ({
   pageNum,
   setCurrentPage,
   changeData,
+  changeLoading,
   ...props
 }) => {
   const customClassName = cn("page-link", className, { active, disabled });
   const [, setSearchParams] = useSearchParams();
 
-
   if (disabled) {
     return <span className={customClassName}>{children}</span>;
   }
   const handleSetCurrentPage = () => {
+    changeLoading(true);
     fetchSearchPlanet("", pageNum).then((data) => {
       changeData(data.results);
       setCurrentPage(pageNum);

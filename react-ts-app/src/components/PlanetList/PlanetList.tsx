@@ -7,8 +7,6 @@ export const PlanetList: React.FC<{
   data: IPlanetData[];
   currentPage: number;
 }> = (props) => {
- 
- 
   return (
     <nav className={classes.planetsWrapper}>
       {props.data.map((el) => (
