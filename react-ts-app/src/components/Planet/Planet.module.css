@@ -1,0 +1,15 @@
+.planetCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: start;
+  width: 300px;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #ccc6;
+  background-color: #6e1dbfd0;
+  border-radius: 10px;
+  height: fit-content;
+  color: white;
+  margin-left: 20px;
+}

@@ -1,0 +1,49 @@
+.page-link {
+  display: inline-flex;
+  border: 1px solid #6e1dbfd0;
+  padding: 10px 15px;
+  background-color: white;
+  color: #6e1dbfd0;
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    border 0.15s ease-in-out;
+}
+
+.page-link:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.page-link:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.page-link:not(:first-child) {
+  margin-left: -1px;
+}
+
+.page-link:hover,
+.page-link:focus {
+  z-index: 2;
+  color: 6e1dbf5d;
+  background-color: #ccc6;
+}
+
+.page-link:focus {
+  z-index: 3;
+}
+
+.page-link.active {
+  color: white;
+  background-color: #6e1dbfd0;
+}
+
+.page-link.disabled {
+  pointer-events: none;
+  color: rgb(179, 177, 177);
+}
