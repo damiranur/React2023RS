@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import classes from "./PlanetList.module.css";
-import { IPlanetData } from "../../types";
 import { Link } from "react-router-dom";
+import { MyContext, CurrentPageContext } from "../../context/context";
 
-export const PlanetList: React.FC<{
-  data: IPlanetData[];
-  currentPage: number;
-}> = (props) => {
+export const PlanetList: React.FC = () => {
+  const myContext = useContext(MyContext);
+  const currentPageContext = useContext(CurrentPageContext);
+
   return (
     <nav className={classes.planetsWrapper}>
-      {props.data.map((el) => (
+      {myContext?.myState.data.map((el) => (
         <ul key={el.name} className={classes.planetCard}>
           <li>
             <Link
-              to={`/planets?pageNumber=${props.currentPage}&details=${
+              to={`/planets?pageNumber=${currentPageContext?.currentPage}&details=${
                 el.url.split("/")[5]
               }`}
             >

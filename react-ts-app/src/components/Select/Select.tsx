@@ -1,13 +1,14 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useContext } from "react";
 import classes from "./Select.module.css";
+import { MyContext } from "../../context/context";
 
-interface ISelectProps {
-  changePlanetsPerPage: (planetsPerPage: number) => void;
-}
-
-export const Select: React.FC<ISelectProps> = ({ changePlanetsPerPage }) => {
+export const Select: React.FC = () => {
+  const myContext = useContext(MyContext);
   const changeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-    changePlanetsPerPage(Number(e.target.value) || 10);
+    myContext?.setMyState((prev) => ({
+      ...prev,
+      planetsPerPage: Number(e.target.value) || 10,
+    }));
   };
   return (
     <form className={classes.selectForm}>

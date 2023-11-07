@@ -1,16 +1,13 @@
-import React, { HTMLProps } from "react";
+import React, { HTMLProps, useContext } from "react";
 import cn from "classnames";
 import "./PageLink.css";
 import { fetchSearchPlanet } from "../../apis/PlanetsApi";
-import { IPlanetData } from "../../types";
 import { useSearchParams } from "react-router-dom";
+import { MyContext, CurrentPageContext } from "../../context/context";
 
 interface IPageLinkProps extends HTMLProps<HTMLAnchorElement> {
   active?: boolean;
   pageNum: number;
-  changeData: (planets: IPlanetData[]) => void;
-  setCurrentPage: (currentPage: number) => void;
-  changeLoading: (loading: boolean) => void;
 }
 
 export const PageLink: React.FC<IPageLinkProps> = ({
@@ -19,11 +16,10 @@ export const PageLink: React.FC<IPageLinkProps> = ({
   active,
   disabled,
   pageNum,
-  setCurrentPage,
-  changeData,
-  changeLoading,
   ...props
 }) => {
+  const myContext = useContext(MyContext);
+  const currentPageContext = useContext(CurrentPageContext);
   const customClassName = cn("page-link", className, { active, disabled });
   const [, setSearchParams] = useSearchParams();
 
@@ -31,10 +27,12 @@ export const PageLink: React.FC<IPageLinkProps> = ({
     return <span className={customClassName}>{children}</span>;
   }
   const handleSetCurrentPage = () => {
-    changeLoading(true);
+    myContext?.setMyState((prev) => ({ ...prev, loading: true }));
     fetchSearchPlanet("", pageNum).then((data) => {
-      changeData(data.results);
-      setCurrentPage(pageNum);
+      myContext?.setMyState((prev) => ({ ...prev, data: data.results }));
+      myContext?.setMyState((prev) => ({ ...prev, loading: false }));
+      myContext?.setMyState((prev) => ({ ...prev, planetsPerPage: pageNum }));
+      currentPageContext?.setCurrentPage(Number(pageNum));
       setSearchParams((prev) => ({ ...prev, pageNumber: pageNum.toString() }));
     });
   };
