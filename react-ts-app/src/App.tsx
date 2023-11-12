@@ -26,7 +26,7 @@ export type MyState = {
   planetsPerPage: number;
 };
 
-export const Root: React.FC = () => {
+export const App: React.FC = () => {
   const [myState, setMyState] = useState<MyState>({
     data: [],
     loading: false,
@@ -96,7 +96,7 @@ export const Root: React.FC = () => {
   }
 
   return (
-    <div>
+    <div data-testid="app">
       <ErrorBoundary>
         <MyContext.Provider value={{ myState, setMyState }}>
           <CurrentPageContext.Provider value={{ currentPage, setCurrentPage }}>
@@ -125,6 +125,7 @@ export const Root: React.FC = () => {
               {myState.loading && (
                 <FontAwesomeIcon
                   icon={faRotate}
+                  title="faRotate"
                   style={{
                     color: "#6e1dbf",
                     fontSize: 20,

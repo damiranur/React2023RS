@@ -44,6 +44,7 @@ export const Planet: React.FC = () => {
   return planetCardState.loading ? (
     <FontAwesomeIcon
       icon={faRotate}
+      title="faRotate"
       style={{
         color: "#6e1dbf",
         fontSize: 20,

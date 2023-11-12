@@ -33,6 +33,7 @@ export const SearchBar: React.FC = () => {
         className={classes.search}
         value={myContext?.myState.inputValue || ""}
         onChange={onInputChange}
+        data-testid="search-form"
       />
     </form>
   );

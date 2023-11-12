@@ -8,10 +8,10 @@ import { MyContext, CurrentPageContext } from "../../context/context";
 interface IPageLinkProps extends HTMLProps<HTMLAnchorElement> {
   active?: boolean;
   pageNum: number;
+  children: React.ReactNode | string
 }
 
 export const PageLink: React.FC<IPageLinkProps> = ({
-  className,
   children,
   active,
   disabled,
@@ -20,7 +20,7 @@ export const PageLink: React.FC<IPageLinkProps> = ({
 }) => {
   const myContext = useContext(MyContext);
   const currentPageContext = useContext(CurrentPageContext);
-  const customClassName = cn("page-link", className, { active, disabled });
+  const customClassName = cn("page-link", { active, disabled });
   const [, setSearchParams] = useSearchParams();
 
   if (disabled) {
