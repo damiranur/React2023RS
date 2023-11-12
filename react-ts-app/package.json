@@ -12,7 +12,8 @@
     "format:fix": "prettier --write .",
     "prepare": "cd .. && husky install react-ts-app/.husky",
     "test": "jest",
-    "test:coverage": "npm test -- --coverage"
+    "test:coverage": "npm test -- --coverage",
+    "pre-push": "npm run test"
   },
   "dependencies": {
     "@babel/plugin-transform-class-properties": "^7.22.5",
