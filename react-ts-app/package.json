@@ -64,6 +64,13 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   },
+  "husky": {
+    "hooks": {
+     "pre-commit": "npm test",
+     "pre-push": "npm test",
+     "…": "…"
+    }
+   },
   "jest": {
     "verbose": true,
     "globals": {
@@ -99,4 +106,5 @@
       "<rootDir>/setupJest.ts"
     ]
   }
+  
 }
