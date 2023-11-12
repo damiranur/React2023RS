@@ -9,11 +9,11 @@
     "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
     "preview": "vite preview",
     "precommit": "npm run lint",
+    "pre-push": "npm run test",
     "format:fix": "prettier --write .",
     "prepare": "cd .. && husky install react-ts-app/.husky",
     "test": "jest",
-    "test:coverage": "npm test -- --coverage",
-    "pre-push": "npm run test"
+    "test:coverage": "npm test -- --coverage"
   },
   "dependencies": {
     "@babel/plugin-transform-class-properties": "^7.22.5",
@@ -64,13 +64,6 @@
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   },
-  "husky": {
-    "hooks": {
-     "pre-commit": "npm test",
-     "pre-push": "npm test",
-     "…": "…"
-    }
-   },
   "jest": {
     "verbose": true,
     "globals": {
